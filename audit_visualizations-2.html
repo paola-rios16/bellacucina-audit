@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bella Cucina Marketing Audit - Data Visualizations</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+        
+        .date {
+            color: #999;
+            font-size: 0.9em;
+        }
+        
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .chart-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+        
+        .chart-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .chart-subtitle {
+            font-size: 0.9em;
+            color: #666;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .metric-value {
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .metric-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .insight-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+        
+        .insight-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .insight-box p {
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .legend-custom {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 15px;
+            background: #f8f9fa;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+        
+        @media (max-width: 768px) {
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .metric-value {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Bella Cucina Marketing Audit</h1>
+            <div class="subtitle">Q4 2025 Data Visualizations</div>
+            <div class="date">October 2025 - January 2026</div>
+        </div>
+
+        <!-- KEY METRICS OVERVIEW -->
+        <div class="chart-grid">
+            <div class="chart-container">
+                <div class="metric-card">
+                    <div class="metric-value">49,214</div>
+                    <div class="metric-label">Total Sessions (90 days)</div>
+                </div>
+            </div>
+            <div class="chart-container">
+                <div class="metric-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <div class="metric-value">0.89%</div>
+                    <div class="metric-label">Conversion Rate (↑58%)</div>
+                </div>
+            </div>
+            <div class="chart-container">
+                <div class="metric-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    <div class="metric-value">25,126</div>
+                    <div class="metric-label">Email Subscribers</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REVENUE DRIVERS -->
+        <div class="chart-grid">
+            <div class="chart-container full-width">
+                <h2 class="chart-title">Revenue Drivers</h2>
+                <p class="chart-subtitle">Primary channels generating direct revenue</p>
+                <canvas id="revenueDriversChart"></canvas>
+                <div class="insight-box">
+                    <h3>Key Insight</h3>
+                    <p>Email workflows (61.7% open rate) dramatically outperform broadcast emails (29.7% open rate), making automation the highest-ROI strategy for revenue generation.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRAFFIC DRIVERS -->
+        <div class="chart-grid">
+            <div class="chart-container">
+                <h2 class="chart-title">Traffic Sources Overview</h2>
+                <p class="chart-subtitle">49,214 total sessions breakdown</p>
+                <canvas id="trafficOverviewChart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <h2 class="chart-title">Social Media Traffic</h2>
+                <p class="chart-subtitle">562 sessions from social platforms</p>
+                <canvas id="socialTrafficChart"></canvas>
+            </div>
+        </div>
+
+        <!-- BRAND EQUITY BUILDERS -->
+        <div class="chart-grid">
+            <div class="chart-container">
+                <h2 class="chart-title">Pinterest Growth Metrics</h2>
+                <p class="chart-subtitle">90-day performance trends</p>
+                <canvas id="pinterestGrowthChart"></canvas>
+                <div class="insight-box">
+                    <h3>Opportunity</h3>
+                    <p>Pinterest shows significant growth: +204% outbound clicks, +113% saves, +46% impressions. Making it the fastest-growing organic channel.</p>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <h2 class="chart-title">Email Performance Comparison</h2>
+                <p class="chart-subtitle">Workflows vs Broadcast Campaigns</p>
+                <canvas id="emailComparisonChart"></canvas>
+            </div>
+        </div>
+
+        <!-- OPPORTUNITIES -->
+        <div class="chart-grid">
+            <div class="chart-container">
+                <h2 class="chart-title">Substack Opportunity</h2>
+                <p class="chart-subtitle">Revenue & engagement metrics</p>
+                <canvas id="substackChart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <h2 class="chart-title">YouTube Passive Opportunity</h2>
+                <p class="chart-subtitle">64 sessions with zero effort</p>
+                <canvas id="youtubeChart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <h2 class="chart-title">Revenue Sources Breakdown</h2>
+                <p class="chart-subtitle">Substack $560 ARR by channel</p>
+                <canvas id="substackRevenueChart"></canvas>
+            </div>
+        </div>
+
+        <!-- UNDERPERFORMERS -->
+        <div class="chart-grid">
+            <div class="chart-container full-width">
+                <h2 class="chart-title">Underperforming Channels</h2>
+                <p class="chart-subtitle">Low-ROI channels consuming time without returns</p>
+                <canvas id="underperformersChart"></canvas>
+                <div class="insight-box">
+                    <h3>Recommendation</h3>
+                    <p>LinkedIn generates only 9 sessions in 90 days (0.02% of traffic), Linkin.bio has 2 page views, and TikTok shows no measurable conversions. Consider eliminating or drastically reducing time spent on these channels.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- GOOGLE SEARCH CRISIS -->
+        <div class="chart-grid">
+            <div class="chart-container full-width">
+                <h2 class="chart-title">CRITICAL ISSUE: Google Search Decline</h2>
+                <p class="chart-subtitle">86% traffic loss - immediate action required</p>
+                <canvas id="googleDeclineChart"></canvas>
+                <div class="insight-box" style="border-left-color: #f5576c;">
+                    <h3>Critical Action Needed</h3>
+                    <p><strong>10,614 pages (91.6%) are NOT indexed by Google.</strong> This represents approximately 58 lost orders per month ($3,500-5,800 in monthly revenue). Priority actions: Fix indexing issues, submit sitemap, investigate potential penalties.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Chart.js defaults
+        Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif';
+        Chart.defaults.font.size = 13;
+        Chart.defaults.color = '#666';
+
+        // Color scheme
+        const colors = {
+            primary: '#667eea',
+            secondary: '#764ba2',
+            success: '#48bb78',
+            warning: '#ed8936',
+            danger: '#f56565',
+            info: '#4299e1',
+            purple: '#9f7aea',
+            pink: '#ed64a6',
+            teal: '#38b2ac',
+            cyan: '#0bc5ea'
+        };
+
+        // 1. REVENUE DRIVERS
+        new Chart(document.getElementById('revenueDriversChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Shopify E-commerce', 'Email Workflows', 'Substack Newsletter', 'Email Broadcasts'],
+                datasets: [{
+                    label: 'Performance Score',
+                    data: [95, 92, 75, 45],
+                    backgroundColor: [
+                        colors.primary,
+                        colors.success,
+                        colors.info,
+                        colors.warning
+                    ],
+                    borderRadius: 10,
+                    barThickness: 60
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const labels = [
+                                    '49,214 sessions • 0.89% conversion',
+                                    '61.7% open • 22.7% click rate',
+                                    '8,802 subs • $560/yr • 40.82% open',
+                                    '25,126 subs • 29.7% open • 0.8% click'
+                                ];
+                                return labels[context.dataIndex];
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Effectiveness Score (0-100)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // 2. TRAFFIC OVERVIEW
+        new Chart(document.getElementById('trafficOverviewChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Direct Traffic', 'Email', 'Social Media', 'Google Search', 'Other'],
+                datasets: [{
+                    data: [8900, 15000, 562, 1067, 23685],
+                    backgroundColor: [
+                        colors.primary,
+                        colors.success,
+                        colors.info,
+                        colors.danger,
+                        '#e2e8f0'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                return `${label}: ${value.toLocaleString()} (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 3. SOCIAL TRAFFIC
+        new Chart(document.getElementById('socialTrafficChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Facebook', 'Instagram', 'Pinterest', 'YouTube', 'LinkedIn'],
+                datasets: [{
+                    label: 'Sessions',
+                    data: [222, 190, 77, 64, 9],
+                    backgroundColor: [
+                        '#1877f2',
+                        '#e4405f',
+                        '#e60023',
+                        '#ff0000',
+                        '#0077b5'
+                    ],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const percentages = ['39.5%', '33.8%', '13.7%', '11.4%', '1.6%'];
+                                return `${context.parsed.x} sessions (${percentages[context.dataIndex]} of social)`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Sessions (90 days)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // 4. PINTEREST GROWTH
+        new Chart(document.getElementById('pinterestGrowthChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Impressions', 'Engagements', 'Outbound Clicks', 'Saves'],
+                datasets: [{
+                    label: 'Growth %',
+                    data: [46, 79, 204, 113],
+                    backgroundColor: [
+                        colors.success,
+                        colors.info,
+                        colors.primary,
+                        colors.purple
+                    ],
+                    borderRadius: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const values = ['71.82K', '1.76K', '77', '340'];
+                                return `+${context.parsed.y}% growth • ${values[context.dataIndex]} total`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Growth Percentage'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 5. EMAIL COMPARISON
+        new Chart(document.getElementById('emailComparisonChart'), {
+            type: 'radar',
+            data: {
+                labels: ['Open Rate', 'Click Rate', 'Engagement', 'Conversion', 'ROI'],
+                datasets: [
+                    {
+                        label: 'Workflows',
+                        data: [100, 100, 90, 85, 95],
+                        backgroundColor: 'rgba(72, 187, 120, 0.2)',
+                        borderColor: colors.success,
+                        borderWidth: 3,
+                        pointBackgroundColor: colors.success,
+                        pointRadius: 5
+                    },
+                    {
+                        label: 'Broadcasts',
+                        data: [48, 3.5, 40, 35, 45],
+                        backgroundColor: 'rgba(237, 137, 54, 0.2)',
+                        borderColor: colors.warning,
+                        borderWidth: 3,
+                        pointBackgroundColor: colors.warning,
+                        pointRadius: 5
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            stepSize: 25
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                if (context.datasetIndex === 0) {
+                                    const metrics = ['61.7%', '22.7%', 'High', 'Strong', 'Excellent'];
+                                    return `Workflows: ${metrics[context.dataIndex]}`;
+                                } else {
+                                    const metrics = ['29.7%', '0.8%', 'Moderate', 'Low', 'Medium'];
+                                    return `Broadcasts: ${metrics[context.dataIndex]}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 6. SUBSTACK METRICS
+        new Chart(document.getElementById('substackChart'), {
+            type: 'line',
+            data: {
+                labels: ['Subscribers', 'Open Rate', 'Revenue ARR', 'Effort (hrs/week)'],
+                datasets: [{
+                    label: 'Performance Index',
+                    data: [88, 82, 56, 10],
+                    borderColor: colors.primary,
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 6,
+                    pointBackgroundColor: colors.primary,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const values = ['8,802 subscribers', '40.82% open rate', '$560/year', '1 hr/week'];
+                                return values[context.dataIndex];
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Performance Score'
+                        }
+                    }
+                }
+            }
+        });
+
+        // 6B. YOUTUBE OPPORTUNITY
+        new Chart(document.getElementById('youtubeChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Sessions', 'Effort', 'ROI Potential'],
+                datasets: [{
+                    label: 'YouTube Metrics',
+                    data: [64, 0, 90],
+                    backgroundColor: [
+                        '#ff0000',
+                        colors.success,
+                        colors.primary
+                    ],
+                    borderRadius: 10,
+                    barThickness: 60
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const labels = [
+                                    '64 sessions (90 days)',
+                                    '0 hours invested',
+                                    'High potential passive asset'
+                                ];
+                                return labels[context.dataIndex];
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Value Score'
+                        }
+                    }
+                }
+            }
+        });
+
+        // 7. SUBSTACK REVENUE BREAKDOWN
+        new Chart(document.getElementById('substackRevenueChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Import (Email)', 'Direct', 'Instagram'],
+                datasets: [{
+                    data: [320, 160, 80],
+                    backgroundColor: [
+                        colors.primary,
+                        colors.info,
+                        '#e4405f'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed;
+                                const percentages = ['57.14%', '28.57%', '14.29%'];
+                                return `${label}: $${value} (${percentages[context.dataIndex]})`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 8. UNDERPERFORMERS
+        new Chart(document.getElementById('underperformersChart'), {
+            type: 'bar',
+            data: {
+                labels: ['LinkedIn', 'Linkin.bio', 'TikTok', 'Low-performing Email Segments'],
+                datasets: [{
+                    label: 'Sessions/Views (90 days)',
+                    data: [9, 2, 0, 0],
+                    backgroundColor: colors.danger,
+                    borderRadius: 8
+                }, {
+                    label: 'Time Investment (hrs/week)',
+                    data: [2, 1, 3, 5],
+                    backgroundColor: colors.warning,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            afterBody: function(context) {
+                                const rois = [
+                                    'ROI: 0.02% of traffic',
+                                    'ROI: Virtually zero',
+                                    'ROI: 89 followers, no conversions',
+                                    'ROI: Under 20% open rates'
+                                ];
+                                return rois[context[0].dataIndex];
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Value'
+                        }
+                    }
+                }
+            }
+        });
+
+        // 9. GOOGLE SEARCH DECLINE
+        new Chart(document.getElementById('googleDeclineChart'), {
+            type: 'line',
+            data: {
+                labels: ['Previous Period', 'Current Period'],
+                datasets: [
+                    {
+                        label: 'Clicks',
+                        data: [7735, 1067],
+                        borderColor: colors.danger,
+                        backgroundColor: 'rgba(245, 101, 101, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.1,
+                        pointRadius: 8,
+                        pointBackgroundColor: colors.danger
+                    },
+                    {
+                        label: 'Pages Indexed',
+                        data: [11580, 966],
+                        borderColor: colors.warning,
+                        backgroundColor: 'rgba(237, 137, 54, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.1,
+                        pointRadius: 8,
+                        pointBackgroundColor: colors.warning
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                if (context.datasetIndex === 0) {
+                                    return context.dataIndex === 0 ? 
+                                        'Clicks: ~7,735 (estimated)' : 
+                                        'Clicks: 1,067 (↓86%)';
+                                } else {
+                                    return context.dataIndex === 0 ? 
+                                        'Pages Indexed: ~11,580 (estimated)' : 
+                                        'Pages Indexed: 966 (↓92%)';
+                                }
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Count'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
